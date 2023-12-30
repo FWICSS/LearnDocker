@@ -1,0 +1,13 @@
+# IntelliJ project files
+.idea/
+*.iml
+out
+gen
+/**/.idea
+
+
+### All nodemodules
+/**/node_modules
+
+*.env
+/**/.env

@@ -1,0 +1,7 @@
+services:
+  reactprod:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"

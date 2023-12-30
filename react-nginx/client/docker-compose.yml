@@ -1,0 +1,24 @@
+services:
+  client:
+    container_name: client
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - type: bind
+        source: ./
+        target: /home/node
+      - type: volume
+        target: /home/node/node_modules
+  test:
+    container_name: test
+    build: .
+    volumes:
+      - type: bind
+        source: ./
+        target: /home/node
+      - type: volume
+        target: /home/node/node_modules
+    tty: true
+    stdin_open: true
+    command: ["npm", "run", "test"]

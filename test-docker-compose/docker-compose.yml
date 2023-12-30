@@ -1,0 +1,27 @@
+services:
+  a:
+    image: alpine
+    command: ['ping', "google.fr"]
+  b:
+    environment:
+      - COMPOSE_PROJECT_NAME=LearnDockerCompose
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        - FOLDER=test
+      labels:
+        - email=test@gmail.com
+    ports:
+      - 80:80
+    volumes:
+      - type: bind
+        source: ./data
+        target: /app/data
+      - type: volume
+        source: datavolume
+        target: /app/datavolume
+
+volumes:
+    datavolume:
+      external : true

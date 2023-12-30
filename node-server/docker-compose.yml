@@ -1,0 +1,26 @@
+services:
+  db:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
+    volumes:
+      - type: volume
+        source: mydb
+        target: /data/db
+  server:
+    environment:
+      - MONGO_USERNAME
+      - MONGO_PWD
+    build: .
+    ports:
+      - 80:80
+    volumes:
+      - type: bind
+        source: ./src
+        target: /app/src
+volumes:
+  mydb:
+    external: true
+
+  # server
