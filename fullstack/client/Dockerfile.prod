@@ -4,7 +4,6 @@ COPY package.json .
 RUN npm install
 COPY . .
 RUN npm run build
-LABEL authors="dimitriaigle"
 
 FROM nginx:latest
 COPY --from=build /app/build /usr/share/nginx/html

@@ -1,4 +1,5 @@
-services:
+version: "3.8"
+services: 
   client:
     build:
       context: ./client
@@ -7,31 +8,37 @@ services:
   api:
     build:
       context: ./api
-      dockerfile: Dockerfile
-    env_file:
-      - ./api/.env
-    environment:
-      NODE_ENV: production
+      dockerfile: Dockerfile.prod
+    environment: 
+      - MONGO_USERNAME
+      - MONGO_PWD
+      - NODE_ENV=production
     restart: unless-stopped
-    depends_on:
+    depends_on: 
       - db
   db:
-    image: mongo:7
-    volumes:
+    image: mongo
+    volumes: 
       - type: volume
         source: dbprod
         target: /data/db
-    env_file:
-      - ./db/.env
+    environment: 
+      - MONGO_INITDB_ROOT_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD
     restart: unless-stopped
   reverse-proxy:
     build:
       context: ./reverse-proxy
       dockerfile: Dockerfile.prod
-    ports:
+    ports: 
       - 80:80
+      - 443:443
+    volumes: 
+      - type: bind
+        source: /etc/letsencrypt
+        target: /etc/letsencrypt
     restart: unless-stopped
-    depends_on:
+    depends_on: 
       - api
       - db
       - client
