@@ -1,0 +1,49 @@
+services:
+  mysql:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'Pomme123123'
+      MYSQL_DATABASE: 'quora'
+      MYSQL_USER: 'test'
+      MYSQL_PASSWORD: 'Pomme123123'
+      MYSQL_ROOT_HOST: '%'
+    volumes:
+      - type: volume
+        source: dbtest
+        target: /var/lib/mysql
+    ports:
+      - 3306:3306
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile.php
+    volumes:
+      - type: volume
+        source: tls
+        target: /root/.symfony5/certs
+      - type: bind
+        source: .
+        target: /app
+      - type: volume
+        target: /app/vendor
+    ports:
+      - 8000:8000
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile.encore.dev
+    volumes:
+      - type: volume
+        source: tls
+        target: /root/.symfony5/certs
+      - type: volume
+        target: /app/node_modules
+      - type: bind
+        target: /app
+        source: .
+    ports:
+      - 8080:8080
+volumes:
+  dbtest:
+  tls:
